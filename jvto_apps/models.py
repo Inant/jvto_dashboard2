@@ -1276,7 +1276,7 @@ class ItemCalculations(models.Model):
 
 class Itineraries(models.Model):
     id = models.BigAutoField(primary_key=True)
-    package = models.ForeignKey('Packages', models.DO_NOTHING)
+    package = models.ForeignKey('Packages',  on_delete=models.CASCADE)
     day = models.IntegerField()
     activity_start = models.ForeignKey(ActivityStarts, models.DO_NOTHING, blank=True, null=True)
     activity_end = models.ForeignKey(ActivityEnds, models.DO_NOTHING, blank=True, null=True)
@@ -1291,6 +1291,8 @@ class Itineraries(models.Model):
     updated_at = models.DateTimeField(blank=True, null=True)
     deleted_at = models.DateTimeField(blank=True, null=True)
 
+    def __str__(self):
+        return f"{self.package.name}"
     class Meta:
         managed = False
         db_table = 'itineraries'
@@ -1603,9 +1605,12 @@ class Packages(models.Model):
     deleted_at = models.DateTimeField(blank=True, null=True)
     experience = models.ForeignKey(Experiences, models.DO_NOTHING, blank=True, null=True)
 
+    def __str__(self):
+        return self.name
+    
     class Meta:
-        managed = False
         db_table = 'packages'
+        ordering = ['name']
 
 
 class Pages(models.Model):
